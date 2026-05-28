@@ -76,8 +76,6 @@ export default function Reports() {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-      <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
-
       {/* ── Header ── */}
       <div>
         <h2 style={{ fontSize: '22px', fontWeight: '800', color: '#111827', letterSpacing: '-0.3px' }}>Reports & Analytics</h2>

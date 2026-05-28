@@ -355,7 +355,7 @@ export default function Courses() {
         </Modal>
       )}
 
-      <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+
 
       {detailCourse && <CourseDetailModal course={detailCourse} onClose={() => setDetail(null)} />}
     </div>

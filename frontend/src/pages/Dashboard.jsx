@@ -170,12 +170,6 @@ export default function Dashboard() {
     name: `Semester ${d.semester}`, value: d.count, color: SEM_COLORS[i] ?? '#94a3b8',
   }));
 
-  const card = (props) => (
-    <div style={{ backgroundColor: '#fff', borderRadius: '14px', boxShadow: '0 1px 4px rgba(0,0,0,0.08)', padding: '20px' }}>
-      {props.children}
-    </div>
-  );
-
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
 
