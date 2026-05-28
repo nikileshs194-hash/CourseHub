@@ -1,8 +1,13 @@
-import { useState } from 'react';
-import { Menu, Calendar, ChevronDown, UserCircle2 } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { Menu, Calendar, UserCircle2 } from 'lucide-react';
+import { getSettings } from '../services/api';
 
 export default function Navbar() {
-  const [open, setOpen] = useState(false);
+  const [adminName, setAdminName] = useState('Administrator');
+
+  useEffect(() => {
+    getSettings().then(r => { if (r.data?.admin_name) setAdminName(r.data.admin_name); }).catch(() => {});
+  }, []);
 
   const today = new Date();
   const dateStr = today.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
@@ -47,53 +52,15 @@ export default function Navbar() {
           <span>{dateStr}, {weekday}</span>
         </div>
 
-        {/* Admin */}
-        <div style={{ position: 'relative' }}>
-          <button
-            onClick={() => setOpen(o => !o)}
-            style={{
-              display: 'flex', alignItems: 'center', gap: '10px',
-              background: 'none', border: 'none', cursor: 'pointer',
-              padding: '6px 10px', borderRadius: '10px',
-            }}
-            onMouseEnter={e => e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.08)'}
-            onMouseLeave={e => e.currentTarget.style.backgroundColor = 'transparent'}
-          >
-            <div style={{
-              width: '36px', height: '36px', borderRadius: '50%',
-              backgroundColor: '#2563eb', display: 'flex', alignItems: 'center', justifyContent: 'center',
-            }}>
-              <UserCircle2 size={22} color="white" />
-            </div>
-            <div style={{ textAlign: 'left' }}>
-              <p style={{ color: '#ffffff', fontSize: '13px', fontWeight: '600', lineHeight: 1 }}>Admin</p>
-              <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '11px', marginTop: '3px' }}>Administrator</p>
-            </div>
-            <ChevronDown size={14} color="rgba(255,255,255,0.4)" />
-          </button>
-
-          {open && (
-            <div style={{
-              position: 'absolute', right: 0, top: '52px',
-              width: '140px', backgroundColor: '#fff',
-              borderRadius: '12px', boxShadow: '0 8px 24px rgba(0,0,0,0.15)',
-              border: '1px solid #e5e7eb', padding: '4px', zIndex: 100,
-            }}>
-              {['Profile', 'Logout'].map(label => (
-                <button key={label} style={{
-                  display: 'block', width: '100%', textAlign: 'left',
-                  padding: '8px 12px', fontSize: '13px', color: '#374151',
-                  background: 'none', border: 'none', cursor: 'pointer',
-                  borderRadius: '8px',
-                }}
-                  onMouseEnter={e => e.currentTarget.style.backgroundColor = '#f9fafb'}
-                  onMouseLeave={e => e.currentTarget.style.backgroundColor = 'transparent'}
-                >
-                  {label}
-                </button>
-              ))}
-            </div>
-          )}
+        {/* Admin display — no dropdown */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '6px 10px', borderRadius: '10px' }}>
+          <div style={{ width: '36px', height: '36px', borderRadius: '50%', backgroundColor: '#2563eb', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <UserCircle2 size={22} color="white" />
+          </div>
+          <div style={{ textAlign: 'left' }}>
+            <p style={{ color: '#ffffff', fontSize: '13px', fontWeight: '600', lineHeight: 1 }}>{adminName}</p>
+            <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '11px', marginTop: '3px' }}>Administrator</p>
+          </div>
         </div>
       </div>
     </header>
