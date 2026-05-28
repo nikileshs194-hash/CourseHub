@@ -132,6 +132,27 @@ export const deleteRegistration = (id) =>
   supabase.from('registrations').delete().eq('registration_id', id)
     .then(({ error }) => { if (error) throw new Error(error.message); return { data: {} }; });
 
+export const getStudentRegistrations = async (studentId) => {
+  const { data, error } = await supabase
+    .from('registrations')
+    .select(`registration_id, registration_date, courses(course_id, title, course_code, semester, credits, department)`)
+    .eq('student_id', studentId)
+    .order('registration_date', { ascending: false });
+  if (error) throw new Error(error.message);
+  return {
+    data: data.map(r => ({
+      registration_id:   r.registration_id,
+      registration_date: r.registration_date,
+      course_id:    r.courses?.course_id,
+      course_title: r.courses?.title,
+      course_code:  r.courses?.course_code,
+      semester:     r.courses?.semester,
+      credits:      r.courses?.credits,
+      department:   r.courses?.department,
+    }))
+  };
+};
+
 /* ════════════════════════════════════════
    DASHBOARD
 ════════════════════════════════════════ */
