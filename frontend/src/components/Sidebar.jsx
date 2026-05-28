@@ -54,7 +54,7 @@ export default function Sidebar() {
             alt="MIT Mysore Logo"
             style={{
               width: '112%', height: '112%',
-              marginLeft: '1%', marginTop: '-5.5%',
+              marginLeft: '0.2%', marginTop: '-5.5%',
               objectFit: 'cover',
               display: 'block',
             }}
