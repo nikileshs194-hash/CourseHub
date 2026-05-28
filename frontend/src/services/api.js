@@ -232,7 +232,7 @@ export const getSettings = async () => {
       data: {
         id: null,
         admin_name: 'Administrator',
-        email: 'admin@mitmysore.edu.in',
+        email: 'principal@mitmysore.in',
         institution_name: 'Maharaja Institute of Technology, Mysore',
         academic_year: '2024-25',
         website: 'https://mitmysore.in',
