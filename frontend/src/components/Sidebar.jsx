@@ -22,7 +22,7 @@ function NavItem({ to, label, icon: Icon }) {
         display: 'flex', alignItems: 'center', gap: '11px',
         padding: '9px 14px', borderRadius: '10px', marginBottom: '3px',
         backgroundColor: active ? '#ffffff' : 'transparent',
-        color: active ? '#111827' : 'rgba(255,255,255,0.72)',
+        color: active ? '#1a2464' : '#ffffff',
         fontWeight: active ? '600' : '400',
         fontSize: '13.5px',
         transition: 'all 0.15s',
@@ -42,7 +42,7 @@ export default function Sidebar() {
   return (
     <aside style={{
       position: 'fixed', top: 0, left: 0, height: '100%', width: '240px',
-      backgroundColor: '#0d1b2e', zIndex: 50,
+      backgroundColor: '#1a2464', zIndex: 50,
       display: 'flex', flexDirection: 'column',
     }}>
 
@@ -79,22 +79,20 @@ export default function Sidebar() {
           alt="MIT Mysore Campus"
           style={{
             width: '100%', height: '100%',
-            objectFit: 'cover', objectPosition: '50% 55%',
+            objectFit: 'cover', objectPosition: '50% 10%',
             display: 'block',
-            transform: 'scale(0.9) translateY(-15px)',
-            transformOrigin: 'center center',
           }}
         />
         {/* Top fade — strong, blends into sidebar */}
         <div style={{
           position: 'absolute', top: 0, left: 0, right: 0, height: '55%',
-          background: 'linear-gradient(to bottom, #0d1b2e 0%, #0d1b2e 20%, rgba(13,27,46,0.6) 70%, transparent 100%)',
+          background: 'linear-gradient(to bottom, #1a2464 0%, #1a2464 20%, rgba(26,36,100,0.6) 70%, transparent 100%)',
         }} />
         {/* Bottom fade + tagline */}
         <div style={{
           position: 'absolute', bottom: 0, left: 0, right: 0,
           padding: '40px 14px 14px',
-          background: 'linear-gradient(to top, #0d1b2e 0%, #0d1b2e 30%, rgba(13,27,46,0.7) 65%, transparent 100%)',
+          background: 'linear-gradient(to top, #1a2464 0%, #1a2464 30%, rgba(26,36,100,0.7) 65%, transparent 100%)',
         }}>
           <p style={{ color: 'rgba(255,255,255,0.95)', fontSize: '12px', fontWeight: '700', letterSpacing: '0.3px', lineHeight: '1.9' }}>
             EMPOWERING <span style={{ color: '#f97316' }}>INNOVATION.</span><br/>

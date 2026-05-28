@@ -11,7 +11,7 @@ export default function Navbar() {
   return (
     <header style={{
       position: 'fixed', top: 0, left: '240px', right: 0, height: '64px',
-      backgroundColor: '#0d1b2e', zIndex: 40,
+      backgroundColor: '#1a2464', zIndex: 40,
       display: 'flex', alignItems: 'center', justifyContent: 'space-between',
       padding: '0 28px',
       borderBottom: '1px solid rgba(255,255,255,0.07)',
@@ -42,8 +42,8 @@ export default function Navbar() {
       {/* Right */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
         {/* Date */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '7px', color: 'rgba(255,255,255,0.65)', fontSize: '13px' }}>
-          <Calendar size={14} color="rgba(255,255,255,0.4)" />
+        <div style={{ display: 'flex', alignItems: 'center', gap: '7px', color: '#ffffff', fontSize: '13px' }}>
+          <Calendar size={14} color="#ffffff" />
           <span>{dateStr}, {weekday}</span>
         </div>
 
