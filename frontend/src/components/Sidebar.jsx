@@ -47,17 +47,19 @@ export default function Sidebar() {
     }}>
 
       {/* ── Logo ── */}
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '20px 16px 16px' }}>
-        <img
-          src="/mit-logo.png"
-          alt="MIT Mysore Logo"
-          style={{
-            width: '100px', height: '100px',
-            borderRadius: '50%',
-            objectFit: 'cover',
-            border: '1px solid rgba(255,255,255,0.15)',
-          }}
-        />
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '12px 16px 8px' }}>
+        <div style={{ width: '80px', height: '80px', borderRadius: '50%', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.05)', flexShrink: 0 }}>
+          <img
+            src="/mit-logo.png"
+            alt="MIT Mysore Logo"
+            style={{
+              width: '112%', height: '112%',
+              marginLeft: '1%', marginTop: '-5.5%',
+              objectFit: 'cover',
+              display: 'block',
+            }}
+          />
+        </div>
         {/* College name */}
         <div style={{ textAlign: 'center', marginTop: '10px', lineHeight: '1.45' }}>
           <div style={{ color: '#ffffff', fontWeight: '700', fontSize: '11.5px', letterSpacing: '0.5px' }}>MAHARAJA</div>
