@@ -3,6 +3,7 @@ import { Plus, Trash2, Search } from 'lucide-react';
 import { getRegistrations, createRegistration, deleteRegistration, getStudents, getCoursesBySemester } from '../services/api';
 
 const SEMESTERS = [1,2,3,4,5,6,7,8];
+const DEPARTMENTS = ['CSE','ISE','ECE','AIML','Mechanical','Civil'];
 const inputStyle = { border: '1px solid #e5e7eb', borderRadius: '8px', padding: '9px 12px', fontSize: '13px', color: '#111827', outline: 'none', width: '100%', fontFamily: 'inherit' };
 const focusStyle = { borderColor: '#1e3a8a', boxShadow: '0 0 0 3px rgba(30,58,138,0.08)' };
 const sel = { ...inputStyle, background: '#fff', cursor: 'pointer' };
@@ -38,6 +39,7 @@ export default function Registrations() {
   const [error,    setError]   = useState('');
   const [search,   setSearch]  = useState('');
   const [semFilter,setSem]     = useState('');
+  const [deptFilter,setDept]   = useState('');
   const [modal,    setModal]   = useState(false);
   const [form,     setForm]    = useState({ student_id: '', course_id: '' });
   const [selStudent, setSelStu]= useState(null);
@@ -60,7 +62,7 @@ export default function Registrations() {
     const stu = students.find(s => s.student_id === id);
     setSelStu(stu);
     if (stu) {
-      try { const r = await getCoursesBySemester(stu.semester); setCourses(r.data); }
+      try { const r = await getCoursesBySemester(stu.semester, stu.department); setCourses(r.data); }
       catch { setCourses([]); }
     } else { setCourses([]); }
   };
@@ -87,7 +89,8 @@ export default function Registrations() {
   const list = regs.filter(r => {
     const q = search.toLowerCase();
     return (!q || r.student_name?.toLowerCase().includes(q) || r.usn?.toLowerCase().includes(q) || r.course_title?.toLowerCase().includes(q)) &&
-           (!semFilter || String(r.semester) === semFilter);
+           (!semFilter || String(r.semester) === semFilter) &&
+           (!deptFilter || r.department === deptFilter);
   });
 
   return (
@@ -116,6 +119,10 @@ export default function Registrations() {
         <select value={semFilter} onChange={e => setSem(e.target.value)} style={{ ...sel, width: '145px', flexShrink: 0 }}>
           <option value="">All Semesters</option>
           {SEMESTERS.map(s => <option key={s} value={s}>Semester {s}</option>)}
+        </select>
+        <select value={deptFilter} onChange={e => setDept(e.target.value)} style={{ ...sel, width: '155px', flexShrink: 0 }}>
+          <option value="">All Departments</option>
+          {DEPARTMENTS.map(d => <option key={d} value={d}>{d}</option>)}
         </select>
         <span style={{ fontSize: '12.5px', color: '#9ca3af', whiteSpace: 'nowrap' }}>{list.length} registration{list.length !== 1 ? 's' : ''}</span>
       </div>

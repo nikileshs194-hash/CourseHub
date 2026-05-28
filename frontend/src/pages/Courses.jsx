@@ -3,7 +3,8 @@ import { Plus, Pencil, Trash2, Search, X, Users, BookOpen, Award, Info } from 'l
 import { getCourses, createCourse, updateCourse, deleteCourse, getCourseEnrollments } from '../services/api';
 
 const SEMESTERS = [1,2,3,4,5,6,7,8];
-const EMPTY = { course_code: '', title: '', semester: 1, credits: 3 };
+const DEPARTMENTS = ['Common','CSE','ISE','ECE','AIML','Mechanical','Civil'];
+const EMPTY = { course_code: '', title: '', semester: 1, credits: 3, department: 'Common' };
 
 const CREDIT_STYLE = {
   1: { bg: '#f3f4f6', color: '#6b7280' },
@@ -172,6 +173,7 @@ export default function Courses() {
   const [error,    setError]   = useState('');
   const [search,   setSearch]  = useState('');
   const [semFilter,setSem]     = useState('');
+  const [deptFilter,setDept]   = useState('');
   const [modal,    setModal]   = useState(false);
   const [editItem, setEdit]    = useState(null);
   const [detailCourse, setDetail] = useState(null);
@@ -189,7 +191,7 @@ export default function Courses() {
   useEffect(() => { load(); }, []);
 
   const openAdd  = () => { setEdit(null); setForm(EMPTY); setFormErr(''); setModal(true); };
-  const openEdit = c  => { setEdit(c); setForm({ course_code: c.course_code, title: c.title, semester: c.semester, credits: c.credits }); setFormErr(''); setModal(true); };
+  const openEdit = c  => { setEdit(c); setForm({ course_code: c.course_code, title: c.title, semester: c.semester, credits: c.credits, department: c.department || 'Common' }); setFormErr(''); setModal(true); };
 
   const save = async () => {
     if (!form.course_code.trim() || !form.title.trim()) { setFormErr('Course code and title are required.'); return; }
@@ -210,7 +212,8 @@ export default function Courses() {
   const list = courses.filter(c => {
     const q = search.toLowerCase();
     return (!q || c.title.toLowerCase().includes(q) || c.course_code.toLowerCase().includes(q)) &&
-           (!semFilter || String(c.semester) === semFilter);
+           (!semFilter || String(c.semester) === semFilter) &&
+           (!deptFilter || c.department === deptFilter);
   });
 
   return (
@@ -242,6 +245,10 @@ export default function Courses() {
           <option value="">All Semesters</option>
           {SEMESTERS.map(s => <option key={s} value={s}>Semester {s}</option>)}
         </select>
+        <select value={deptFilter} onChange={e => setDept(e.target.value)} style={{ ...sel, width: '145px', flexShrink: 0 }}>
+          <option value="">All Departments</option>
+          {DEPARTMENTS.map(d => <option key={d} value={d}>{d}</option>)}
+        </select>
         <span style={{ fontSize: '12.5px', color: '#9ca3af', whiteSpace: 'nowrap' }}>{list.length} course{list.length !== 1 ? 's' : ''}</span>
       </div>
 
@@ -250,19 +257,19 @@ export default function Courses() {
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
             <tr style={{ backgroundColor: '#f9fafb', borderBottom: '1px solid #f3f4f6' }}>
-              {['#','Course Code','Course Title','Semester','Credits','Actions'].map(h => (
+              {['#','Course Code','Course Title','Department','Semester','Credits','Actions'].map(h => (
                 <th key={h} style={{ textAlign: 'left', padding: '14px 20px', fontSize: '12px', fontWeight: '700', color: '#6b7280', letterSpacing: '0.3px', textTransform: 'uppercase' }}>{h}</th>
               ))}
             </tr>
           </thead>
           <tbody>
             {loading ? (
-              <tr><td colSpan={6} style={{ padding: '48px', textAlign: 'center', color: '#9ca3af', fontSize: '14px' }}>
+              <tr><td colSpan={7} style={{ padding: '48px', textAlign: 'center', color: '#9ca3af', fontSize: '14px' }}>
                 <div style={{ display: 'inline-block', width: '24px', height: '24px', border: '3px solid #e5e7eb', borderTopColor: '#1e3a8a', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
                 <p style={{ marginTop: '10px' }}>Loading courses…</p>
               </td></tr>
             ) : list.length === 0 ? (
-              <tr><td colSpan={6} style={{ padding: '48px', textAlign: 'center', color: '#9ca3af', fontSize: '14px' }}>
+              <tr><td colSpan={7} style={{ padding: '48px', textAlign: 'center', color: '#9ca3af', fontSize: '14px' }}>
                 {error ? 'Connection error — check backend' : 'No courses found'}
               </td></tr>
             ) : list.map((c, i) => {
@@ -277,6 +284,11 @@ export default function Courses() {
                     <span style={{ fontSize: '12px', fontFamily: 'monospace', fontWeight: '700', color: '#374151', backgroundColor: '#f3f4f6', padding: '3px 8px', borderRadius: '6px' }}>{c.course_code}</span>
                   </td>
                   <td style={{ padding: '14px 20px', fontSize: '13.5px', fontWeight: '600', color: '#111827' }}>{c.title}</td>
+                  <td style={{ padding: '14px 20px' }}>
+                    {(() => { const dc = DEPT_COLORS[c.department] || { bg: '#f3f4f6', color: '#6b7280' }; return (
+                      <span style={{ fontSize: '12px', fontWeight: '600', padding: '4px 10px', borderRadius: '20px', backgroundColor: dc.bg, color: dc.color }}>{c.department || 'Common'}</span>
+                    ); })()}
+                  </td>
                   <td style={{ padding: '14px 20px' }}>
                     <span style={{ fontSize: '12px', fontWeight: '600', padding: '4px 10px', borderRadius: '20px', backgroundColor: '#eff6ff', color: '#1d4ed8' }}>Semester {c.semester}</span>
                   </td>
@@ -315,6 +327,11 @@ export default function Courses() {
             <Field label="Course Title *">
               <input value={form.title} onChange={e => setForm({...form, title: e.target.value})} placeholder="e.g. Database Management Systems" style={inputStyle}
                 onFocus={e => Object.assign(e.target.style, focusStyle)} onBlur={e => { e.target.style.borderColor='#e5e7eb'; e.target.style.boxShadow='none'; }} />
+            </Field>
+            <Field label="Department">
+              <select value={form.department || 'Common'} onChange={e => setForm({...form, department: e.target.value})} style={sel}>
+                {DEPARTMENTS.map(d => <option key={d} value={d}>{d}</option>)}
+              </select>
             </Field>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
               <Field label="Semester">

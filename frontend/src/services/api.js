@@ -60,8 +60,11 @@ export const getCourseEnrollments = async (courseId) => {
   return { data };
 };
 
-export const getCoursesBySemester = (sem) =>
-  supabase.from('courses').select('*').eq('semester', Number(sem)).order('title').then(check);
+export const getCoursesBySemester = (sem, dept) =>
+  supabase.from('courses').select('*')
+    .eq('semester', Number(sem))
+    .in('department', dept ? [dept, 'Common'] : ['CSE','ISE','ECE','AIML','Mechanical','Civil','Common'])
+    .order('title').then(check);
 
 export const createCourse = (body) =>
   supabase.from('courses')
