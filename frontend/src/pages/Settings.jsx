@@ -240,9 +240,9 @@ export default function Settings() {
             <div style={{ backgroundColor: '#fff', padding: '14px 18px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '9px', fontSize: '12px' }}>
                 <Mail size={13} color="#1e3a8a" />
-                <a href={`mailto:${settings?.email || 'principal@mitmysore.in'}`}
+                <a href="mailto:principal@mitmysore.in"
                   style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', color: '#1e3a8a', textDecoration: 'underline', cursor: 'pointer' }}>
-                  {settings?.email || 'principal@mitmysore.in'}
+                  principal@mitmysore.in
                 </a>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '9px', fontSize: '12px' }}>
