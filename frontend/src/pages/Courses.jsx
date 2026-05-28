@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { Plus, Pencil, Trash2, Search } from 'lucide-react';
-import { getCourses, createCourse, updateCourse, deleteCourse } from '../services/api';
+import { Plus, Pencil, Trash2, Search, X, Users, BookOpen, Award, Info } from 'lucide-react';
+import { getCourses, createCourse, updateCourse, deleteCourse, getCourseEnrollments } from '../services/api';
 
 const SEMESTERS = [1,2,3,4,5,6,7,8];
 const EMPTY = { course_code: '', title: '', semester: 1, credits: 3 };
@@ -39,6 +39,133 @@ function Modal({ title, onClose, children }) {
   );
 }
 
+const DEPT_COLORS = {
+  CSE: { bg: '#eff6ff', color: '#1d4ed8' },
+  ISE: { bg: '#f0fdf4', color: '#15803d' },
+  ECE: { bg: '#fff7ed', color: '#c2410c' },
+  AIML: { bg: '#faf5ff', color: '#7e22ce' },
+  Mechanical: { bg: '#fef9c3', color: '#92400e' },
+  Civil: { bg: '#f0f9ff', color: '#0369a1' },
+};
+
+function CourseDetailModal({ course, onClose }) {
+  const [enrollments, setEnrollments] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState('');
+
+  useEffect(() => {
+    getCourseEnrollments(course.course_id)
+      .then(r => setEnrollments(r.data))
+      .catch(() => setEnrollments([]))
+      .finally(() => setLoading(false));
+  }, [course.course_id]);
+
+  const cc = CREDIT_STYLE[course.credits] || { bg: '#f3f4f6', color: '#6b7280' };
+
+  return (
+    <div style={{ position: 'fixed', inset: 0, zIndex: 200, display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: 'rgba(0,0,0,0.45)', backdropFilter: 'blur(4px)' }}>
+      <div style={{ backgroundColor: '#fff', borderRadius: '16px', width: '100%', maxWidth: '580px', margin: '0 16px', boxShadow: '0 20px 60px rgba(0,0,0,0.2)', overflow: 'hidden', maxHeight: '90vh', display: 'flex', flexDirection: 'column' }}>
+
+        {/* Header */}
+        <div style={{ padding: '20px 24px', borderBottom: '1px solid #f3f4f6', background: 'linear-gradient(135deg, #1a2464 0%, #2d4fa0 100%)', display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
+          <div>
+            <span style={{ fontSize: '11px', fontFamily: 'monospace', fontWeight: '700', color: 'rgba(255,255,255,0.7)', backgroundColor: 'rgba(255,255,255,0.15)', padding: '3px 8px', borderRadius: '6px' }}>{course.course_code}</span>
+            <h3 style={{ fontWeight: '800', fontSize: '18px', color: '#ffffff', marginTop: '8px', letterSpacing: '-0.3px' }}>{course.title}</h3>
+          </div>
+          <button onClick={onClose} style={{ background: 'rgba(255,255,255,0.15)', border: 'none', cursor: 'pointer', color: '#fff', borderRadius: '8px', width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+            <X size={16} />
+          </button>
+        </div>
+
+        {/* Stats Row */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1px', backgroundColor: '#f3f4f6', borderBottom: '1px solid #f3f4f6' }}>
+          {[
+            { icon: <BookOpen size={15} color="#1a2464" />, label: 'Semester', value: `Semester ${course.semester}` },
+            { icon: <Award size={15} color="#16a34a" />, label: 'Credits', value: `${course.credits} Credits` },
+            { icon: <Users size={15} color="#7c3aed" />, label: 'Enrolled', value: loading ? '...' : `${enrollments.length} Students` },
+          ].map((s, i) => (
+            <div key={i} style={{ backgroundColor: '#fff', padding: '16px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px' }}>
+              {s.icon}
+              <p style={{ fontSize: '11px', color: '#9ca3af', fontWeight: '500' }}>{s.label}</p>
+              <p style={{ fontSize: '15px', fontWeight: '700', color: '#111827' }}>{s.value}</p>
+            </div>
+          ))}
+        </div>
+
+        <div style={{ overflowY: 'auto', flex: 1 }}>
+          {/* Description */}
+          <div style={{ padding: '20px 24px', borderBottom: '1px solid #f9fafb' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '7px', marginBottom: '10px' }}>
+              <Info size={14} color="#1a2464" />
+              <h4 style={{ fontSize: '13px', fontWeight: '700', color: '#111827' }}>Course Description</h4>
+            </div>
+            <p style={{ fontSize: '13.5px', color: '#4b5563', lineHeight: '1.7' }}>
+              {course.description || 'No description available for this course.'}
+            </p>
+          </div>
+
+          {/* Enrolled Students */}
+          <div style={{ padding: '20px 24px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '7px' }}>
+                <Users size={14} color="#1a2464" />
+                <h4 style={{ fontSize: '13px', fontWeight: '700', color: '#111827' }}>
+                  Enrolled Students {!loading && <span style={{ color: '#9ca3af', fontWeight: '400' }}>({enrollments.length})</span>}
+                </h4>
+              </div>
+            </div>
+
+            {/* Search */}
+            {!loading && enrollments.length > 0 && (
+              <div style={{ position: 'relative', marginBottom: '12px' }}>
+                <Search size={13} style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)', color: '#9ca3af' }} />
+                <input
+                  value={search}
+                  onChange={e => setSearch(e.target.value)}
+                  placeholder="Search by name or USN…"
+                  style={{ width: '100%', paddingLeft: '32px', padding: '8px 12px 8px 32px', border: '1px solid #e5e7eb', borderRadius: '8px', fontSize: '12.5px', color: '#111827', outline: 'none', fontFamily: 'inherit' }}
+                  onFocus={e => { e.target.style.borderColor = '#1a2464'; e.target.style.boxShadow = '0 0 0 3px rgba(26,36,100,0.08)'; }}
+                  onBlur={e => { e.target.style.borderColor = '#e5e7eb'; e.target.style.boxShadow = 'none'; }}
+                />
+              </div>
+            )}
+
+            {loading ? (
+              <div style={{ textAlign: 'center', padding: '24px', color: '#9ca3af', fontSize: '13px' }}>Loading students…</div>
+            ) : enrollments.length === 0 ? (
+              <div style={{ textAlign: 'center', padding: '24px', color: '#9ca3af', fontSize: '13px' }}>No students enrolled yet</div>
+            ) : (() => {
+              const filtered = enrollments.filter(e => {
+                const q = search.toLowerCase();
+                return !q || e.students?.name?.toLowerCase().includes(q) || e.students?.usn?.toLowerCase().includes(q);
+              });
+              return filtered.length === 0
+                ? <div style={{ textAlign: 'center', padding: '24px', color: '#9ca3af', fontSize: '13px' }}>No students match "{search}"</div>
+                : (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                    {filtered.map((e, i) => {
+                      const dc = DEPT_COLORS[e.students?.department] || { bg: '#f3f4f6', color: '#374151' };
+                      return (
+                        <div key={e.registration_id} style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '10px 14px', backgroundColor: '#f9fafb', borderRadius: '10px' }}>
+                          <span style={{ fontSize: '12px', color: '#9ca3af', width: '20px', flexShrink: 0 }}>{i + 1}</span>
+                          <div style={{ flex: 1 }}>
+                            <p style={{ fontSize: '13px', fontWeight: '600', color: '#111827' }}>{e.students?.name}</p>
+                            <p style={{ fontSize: '11px', fontFamily: 'monospace', color: '#6b7280', marginTop: '2px' }}>{e.students?.usn}</p>
+                          </div>
+                          <span style={{ fontSize: '11px', fontWeight: '600', padding: '3px 9px', borderRadius: '20px', backgroundColor: dc.bg, color: dc.color }}>{e.students?.department}</span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                );
+            })()}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function Courses() {
   const [courses,  setCourses] = useState([]);
   const [loading,  setLoading] = useState(true);
@@ -47,6 +174,7 @@ export default function Courses() {
   const [semFilter,setSem]     = useState('');
   const [modal,    setModal]   = useState(false);
   const [editItem, setEdit]    = useState(null);
+  const [detailCourse, setDetail] = useState(null);
   const [form,     setForm]    = useState(EMPTY);
   const [formErr,  setFormErr] = useState('');
   const [saving,   setSaving]  = useState(false);
@@ -140,7 +268,8 @@ export default function Courses() {
             ) : list.map((c, i) => {
               const cc = CREDIT_STYLE[c.credits] || { bg: '#f3f4f6', color: '#6b7280' };
               return (
-                <tr key={c.course_id} style={{ borderBottom: '1px solid #f9fafb', transition: 'background 0.12s' }}
+                <tr key={c.course_id} style={{ borderBottom: '1px solid #f9fafb', transition: 'background 0.12s', cursor: 'pointer' }}
+                  onClick={() => setDetail(c)}
                   onMouseEnter={e => e.currentTarget.style.backgroundColor = '#fafbff'}
                   onMouseLeave={e => e.currentTarget.style.backgroundColor = 'transparent'}>
                   <td style={{ padding: '14px 20px', fontSize: '13px', color: '#9ca3af' }}>{i+1}</td>
@@ -154,7 +283,7 @@ export default function Courses() {
                   <td style={{ padding: '14px 20px' }}>
                     <span style={{ fontSize: '12px', fontWeight: '600', padding: '4px 10px', borderRadius: '20px', backgroundColor: cc.bg, color: cc.color }}>{c.credits} Credit{c.credits > 1 ? 's' : ''}</span>
                   </td>
-                  <td style={{ padding: '14px 20px' }}>
+                  <td style={{ padding: '14px 20px' }} onClick={e => e.stopPropagation()}>
                     <div style={{ display: 'flex', gap: '6px' }}>
                       <button onClick={() => openEdit(c)} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '32px', height: '32px', borderRadius: '8px', border: '1px solid #e5e7eb', background: '#fff', cursor: 'pointer', color: '#2563eb' }}
                         onMouseEnter={e => e.currentTarget.style.backgroundColor = '#eff6ff'}
@@ -210,6 +339,8 @@ export default function Courses() {
       )}
 
       <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+
+      {detailCourse && <CourseDetailModal course={detailCourse} onClose={() => setDetail(null)} />}
     </div>
   );
 }

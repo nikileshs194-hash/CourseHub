@@ -1,0 +1,40 @@
+-- Add description column to courses table
+ALTER TABLE courses ADD COLUMN IF NOT EXISTS description TEXT;
+
+-- Update descriptions for all courses
+UPDATE courses SET description = 'Covers fundamental concepts of engineering mathematics including calculus, differential equations, and linear algebra essential for engineering problem-solving.' WHERE course_code = 'MA101';
+UPDATE courses SET description = 'Introduces core principles of physics applied to engineering including mechanics, optics, and wave phenomena with practical laboratory work.' WHERE course_code = 'PH101';
+UPDATE courses SET description = 'Explores chemical principles relevant to engineering including thermodynamics, electrochemistry, polymers, and corrosion science.' WHERE course_code = 'CH101';
+UPDATE courses SET description = 'Fundamentals of programming using C language covering data types, control structures, functions, arrays, pointers, and file handling.' WHERE course_code = 'CS101';
+UPDATE courses SET description = 'Develops engineering drawing skills including orthographic projections, isometric views, AutoCAD basics, and technical documentation standards.' WHERE course_code = 'ME101';
+UPDATE courses SET description = 'Covers basic electronic components, circuits, diodes, transistors, and operational amplifiers with hands-on laboratory experiments.' WHERE course_code = 'EL101';
+UPDATE courses SET description = 'Advanced engineering mathematics covering vector calculus, complex analysis, Fourier series, and Laplace transforms.' WHERE course_code = 'MA201';
+UPDATE courses SET description = 'Applied physics for engineering covering quantum mechanics, semiconductor physics, lasers, fiber optics, and superconductivity.' WHERE course_code = 'PH201';
+UPDATE courses SET description = 'Study of fundamental data structures including arrays, linked lists, stacks, queues, trees, graphs, and their algorithms.' WHERE course_code = 'CS201';
+UPDATE courses SET description = 'Covers combinational and sequential digital circuits, Boolean algebra, logic gates, flip-flops, counters, and digital design.' WHERE course_code = 'EC201';
+UPDATE courses SET description = 'Hands-on training in various workshop processes including fitting, welding, carpentry, plumbing, and sheet metal work.' WHERE course_code = 'ME201';
+UPDATE courses SET description = 'Object-oriented programming concepts using Java including classes, inheritance, polymorphism, interfaces, and exception handling.' WHERE course_code = 'CS202';
+UPDATE courses SET description = 'Comprehensive study of database design, SQL, normalization, transaction management, indexing, and database administration.' WHERE course_code = 'CS301';
+UPDATE courses SET description = 'Covers OS concepts including process management, memory management, file systems, CPU scheduling, and deadlock handling.' WHERE course_code = 'CS302';
+UPDATE courses SET description = 'Study of computer network architectures, protocols, TCP/IP model, routing algorithms, and network security fundamentals.' WHERE course_code = 'CS303';
+UPDATE courses SET description = 'Mathematical foundations for computer science including logic, sets, graph theory, combinatorics, and algebraic structures.' WHERE course_code = 'MA301';
+UPDATE courses SET description = 'Advanced algorithms including sorting, searching, dynamic programming, greedy algorithms, and complexity analysis.' WHERE course_code = 'CS304';
+UPDATE courses SET description = 'Architecture and programming of microprocessors, assembly language, interfacing techniques, and embedded system basics.' WHERE course_code = 'EC301';
+UPDATE courses SET description = 'Software development lifecycle, requirements engineering, design patterns, testing methodologies, and project management.' WHERE course_code = 'CS401';
+UPDATE courses SET description = 'Formal language theory, automata, regular expressions, context-free grammars, Turing machines, and computational complexity.' WHERE course_code = 'CS402';
+UPDATE courses SET description = 'CPU organization, instruction set architecture, memory hierarchy, pipelining, and parallel processing concepts.' WHERE course_code = 'CS403';
+UPDATE courses SET description = 'Covers compiler construction phases including lexical analysis, parsing, semantic analysis, optimization, and code generation.' WHERE course_code = 'CS404';
+UPDATE courses SET description = 'Advanced topics in computer networks including wireless networks, multimedia networking, SDN, and network programming.' WHERE course_code = 'CS405';
+UPDATE courses SET description = 'Cryptography, network security protocols, firewalls, intrusion detection, secure coding practices, and ethical hacking fundamentals.' WHERE course_code = 'CS501';
+UPDATE courses SET description = 'Machine learning algorithms, supervised and unsupervised learning, neural networks, deep learning, and practical AI applications.' WHERE course_code = 'CS502';
+UPDATE courses SET description = 'Web technologies including HTML5, CSS3, JavaScript, React, Node.js, RESTful APIs, and modern web development practices.' WHERE course_code = 'CS503';
+UPDATE courses SET description = 'Cloud computing models, virtualization, containerization, AWS/Azure services, DevOps practices, and cloud security.' WHERE course_code = 'CS504';
+UPDATE courses SET description = 'Mobile application development for Android and iOS platforms using native and cross-platform frameworks.' WHERE course_code = 'CS505';
+UPDATE courses SET description = 'Big data technologies, Hadoop ecosystem, Spark, NoSQL databases, data warehousing, and real-time data processing.' WHERE course_code = 'CS601';
+UPDATE courses SET description = 'Deep neural networks, CNN, RNN, LSTM, transformers, and applications in computer vision and natural language processing.' WHERE course_code = 'CS602';
+UPDATE courses SET description = 'Embedded systems design, RTOS, hardware-software co-design, ARM processors, and IoT device programming.' WHERE course_code = 'CS603';
+UPDATE courses SET description = 'Major project work involving design, development, and implementation of a real-world software or hardware system.' WHERE course_code = 'CS701';
+UPDATE courses SET description = 'Advanced topics in software architecture, microservices, DevOps, CI/CD pipelines, and enterprise software development.' WHERE course_code = 'CS702';
+UPDATE courses SET description = 'Capstone project with industry collaboration, presenting complete solutions to real-world engineering problems.' WHERE course_code = 'CS801';
+UPDATE courses SET description = 'Professional ethics, intellectual property, engineering standards, entrepreneurship, and career development for engineers.' WHERE course_code = 'CS802';
+UPDATE courses SET description = 'Advanced research topics in emerging areas of computer science including quantum computing, blockchain, and AR/VR.' WHERE course_code = 'CS803';

@@ -50,6 +50,16 @@ export const deleteStudent = async (id) => {
 export const getCourses = () =>
   supabase.from('courses').select('*').order('semester').order('title').then(check);
 
+export const getCourseEnrollments = async (courseId) => {
+  const { data, error } = await supabase
+    .from('registrations')
+    .select('registration_id, registration_date, students(student_id, name, usn, department, semester)')
+    .eq('course_id', courseId)
+    .order('registration_date', { ascending: false });
+  if (error) throw new Error(error.message);
+  return { data };
+};
+
 export const getCoursesBySemester = (sem) =>
   supabase.from('courses').select('*').eq('semester', Number(sem)).order('title').then(check);
 
