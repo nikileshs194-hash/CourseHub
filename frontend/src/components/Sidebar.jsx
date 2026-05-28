@@ -38,12 +38,14 @@ function NavItem({ to, label, icon: Icon }) {
   );
 }
 
-export default function Sidebar() {
+export default function Sidebar({ open = true }) {
   return (
     <aside style={{
       position: 'fixed', top: 0, left: 0, height: '100%', width: '240px',
       backgroundColor: '#1a2464', zIndex: 50,
       display: 'flex', flexDirection: 'column',
+      transform: open ? 'translateX(0)' : 'translateX(-240px)',
+      transition: 'transform 0.3s ease',
     }}>
 
       {/* ── Logo ── */}

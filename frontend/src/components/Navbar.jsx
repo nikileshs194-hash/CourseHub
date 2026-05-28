@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Menu, Calendar, UserCircle2 } from 'lucide-react';
 import { getSettings } from '../services/api';
 
-export default function Navbar() {
+export default function Navbar({ onToggleSidebar, sidebarOpen }) {
   const [adminName, setAdminName] = useState('Administrator');
 
   useEffect(() => {
@@ -15,7 +15,8 @@ export default function Navbar() {
 
   return (
     <header style={{
-      position: 'fixed', top: 0, left: '240px', right: 0, height: '64px',
+      position: 'fixed', top: 0, left: sidebarOpen ? '240px' : '0px', right: 0, height: '64px',
+      transition: 'left 0.3s ease',
       backgroundColor: '#1a2464', zIndex: 40,
       display: 'flex', alignItems: 'center', justifyContent: 'space-between',
       padding: '0 28px',
@@ -24,7 +25,7 @@ export default function Navbar() {
 
       {/* Left */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-        <button style={{
+        <button onClick={onToggleSidebar} style={{
           background: 'none', border: 'none', cursor: 'pointer',
           color: 'rgba(255,255,255,0.6)', padding: '6px', borderRadius: '8px',
           display: 'flex', alignItems: 'center',

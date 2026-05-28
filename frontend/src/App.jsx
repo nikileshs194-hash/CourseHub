@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Sidebar from './components/Sidebar';
 import Navbar from './components/Navbar';
@@ -10,12 +11,18 @@ import Settings from './pages/Settings';
 import './index.css';
 
 export default function App() {
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+
   return (
     <BrowserRouter>
       <div style={{ display: 'flex', minHeight: '100vh', backgroundColor: '#f1f5f9' }}>
-        <Sidebar />
-        <div style={{ marginLeft: '240px', flex: 1, display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-          <Navbar />
+        <Sidebar open={sidebarOpen} />
+        <div style={{
+          marginLeft: sidebarOpen ? '240px' : '0px',
+          flex: 1, display: 'flex', flexDirection: 'column', minHeight: '100vh',
+          transition: 'margin-left 0.3s ease',
+        }}>
+          <Navbar onToggleSidebar={() => setSidebarOpen(o => !o)} sidebarOpen={sidebarOpen} />
           <main style={{ marginTop: '64px', flex: 1, padding: '24px 28px', overflowY: 'auto' }}>
             <Routes>
               <Route path="/"              element={<Dashboard />} />
