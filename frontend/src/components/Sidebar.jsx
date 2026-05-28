@@ -55,7 +55,7 @@ export default function Sidebar() {
             width: '100px', height: '100px',
             borderRadius: '50%',
             objectFit: 'cover',
-            border: '2px solid rgba(255,255,255,0.15)',
+            border: '1px solid rgba(255,255,255,0.15)',
           }}
         />
         {/* College name */}
